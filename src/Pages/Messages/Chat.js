@@ -23,7 +23,7 @@ export const Chat = () => {
   const [loading, setLoading] = useState(true);
   const auth = getAuth();
   const [userId, setUserId] = useState(null);
-  const [friendName, setFriendName] = useState("");  // Fetch user ID once Firebase auth is ready
+  const [friendName, setFriendName] = useState(""); 
   useEffect(() => {
     const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -37,7 +37,7 @@ export const Chat = () => {
   }, []);
 
   useEffect(() => {
-    if (!userId) return; // Wait until userId is available
+    if (!userId) return; 
 
     console.log("Fetching all messages...");
 
@@ -66,7 +66,6 @@ export const Chat = () => {
     return () => unsubscribe();
   }, [userId]);
 
-  // Filter messages based on senderId and receiverId
   useEffect(() => {
     if (!userId || !friendId) return;
 
@@ -106,7 +105,7 @@ export const Chat = () => {
       try {
         const friendDoc = await getDoc(friendRef);
         if (friendDoc.exists()) {
-          setFriendName(friendDoc.data().username); // Assuming the field is "username"
+          setFriendName(friendDoc.data().username); 
         }
       } catch (error) {
         console.error("Error fetching friend's name:", error);
@@ -119,7 +118,6 @@ export const Chat = () => {
   const handleDelete = async () => {
     if (!userId || !friendId) return;
 
-    // Find all messages between the user and the friend
     const messagesToDelete = messages.filter(
       (msg) =>
         (msg.senderId === userId && msg.receiverId === friendId) ||
@@ -127,12 +125,10 @@ export const Chat = () => {
     );
 
     try {
-      // Delete each message
       for (const msg of messagesToDelete) {
         await deleteDoc(doc(db, "messages", msg.id));
       }
 
-      // Update the state to remove the deleted messages
       setMessages(messages.filter((msg) => !messagesToDelete.includes(msg)));
       setFilteredMessages([]);
       console.log("Chat cleared successfully!");

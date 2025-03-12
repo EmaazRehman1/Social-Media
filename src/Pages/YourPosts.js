@@ -15,7 +15,7 @@ export const YourPosts = () => {
     const [currentPost, setCurrentPost] = useState(null);
     const [newTitle, setNewTitle] = useState('');
     const [newDesc, setNewDesc] = useState('');
-    const [loading, setLoading] = useState(false); // Loading state
+    const [loading, setLoading] = useState(false); 
 
     const handleUpdate = async (id) => {
         try {
@@ -26,7 +26,7 @@ export const YourPosts = () => {
                 return;
             }
 
-            setLoading(true); // Start loading
+            setLoading(true); 
             await updateDoc(doc(db, 'posts', id), {
                 title: newTitle,
                 description: newDesc,
@@ -42,13 +42,13 @@ export const YourPosts = () => {
                 position: "top-center"
             })
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
 
     const handleDelete = async (id) => {
         try {
-            setLoading(true); // Start loading
+            setLoading(true); 
             await deleteDoc(doc(db, 'posts', id));
             fetchUserPosts();
             toast.success("Post deleted Sucessfully!!", {
@@ -60,13 +60,13 @@ export const YourPosts = () => {
                 position: "top-center"
             })
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
 
     const fetchUserPosts = async () => {
         try {
-            setLoading(true); // Start loading
+            setLoading(true); 
             if (!user) return;
             const postsRef = collection(db, 'posts');
             const q = query(postsRef, where('username', '==', user.email));
@@ -82,37 +82,11 @@ export const YourPosts = () => {
         } catch (error) {
             console.error('Error fetching user posts:', error);
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false); 
         }
     };
 
-    // const fetchUserPosts = async () => {
-    //     try {
-    //         setLoading(true); // Start loading
-    //         if (!user) return;
     
-    //         const postsRef = collection(db, 'posts');
-    //         // Query posts where username matches and order by timestamp in descending order
-    //         const q = query(
-    //             postsRef,
-    //             where('username', '==', user.email),
-    //             orderBy('timestamp', 'desc') // Order by timestamp in descending order
-    //         );
-    
-    //         const querySnapshot = await getDocs(q);
-    //         console.log('Query Snapshot:', querySnapshot);
-    //         const userPosts = querySnapshot.docs.map((doc) => ({
-    //             ...doc.data(),
-    //             id: doc.id,
-    //         }));
-    
-    //         setPosts(userPosts);
-    //     } catch (error) {
-    //         console.error('Error fetching user posts:', error);
-    //     } finally {
-    //         setLoading(false); // Stop loading
-    //     }
-    // };
     
     useEffect(() => {
         fetchUserPosts();

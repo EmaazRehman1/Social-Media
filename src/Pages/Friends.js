@@ -63,14 +63,12 @@ export const Friends = () => {
         try {
             const currentUserId = user.uid;
 
-            // Get the references to the friendship documents
             const friendCollectionRef = collection(db, 'friends');
             const q1 = query(friendCollectionRef, where('person1Id', '==', currentUserId), where('person2Id', '==', friendId));
             const q2 = query(friendCollectionRef, where('person1Id', '==', friendId), where('person2Id', '==', currentUserId));
 
             const [q1Snapshot, q2Snapshot] = await Promise.all([getDocs(q1), getDocs(q2)]);
 
-            // If friendship exists, delete both entries
             if (!q1Snapshot.empty) {
                 const docRef = q1Snapshot.docs[0].ref;
                 await deleteDoc(docRef);
@@ -80,7 +78,6 @@ export const Friends = () => {
                 await deleteDoc(docRef);
             }
 
-            // Update the friends list state by filtering out the removed friend
             setFriends(prevFriends => prevFriends.filter(friend => friend.id !== friendId));
 
             toast.success("Friend removed successfully!", {

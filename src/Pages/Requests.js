@@ -49,25 +49,22 @@ export const Requests = () => {
 
 const handleAcceptRequest = async (requestId) => {
     try {
-        // Get the request document
         const requestDoc = doc(db, 'friendrequests', requestId);
         const requestData = (await getDoc(requestDoc)).data();
 
         if (requestData) {
-            // Add the friendship to the 'friends' collection
             await addDoc(collection(db, 'friends'), {
                 person1Id: requestData.senderId,
                 person2Id: requestData.recieverId,
-                createdAt: new Date(), // Optional: Track when the friendship was created
+                createdAt: new Date(), 
             });
 
-            // Update the request status to 'accepted'
             await updateDoc(requestDoc, { status: 'accepted' });
 
             toast.success("Friend request Accepted!", {
                 position: "top-center"
            })
-            fetchRequests(); // Refresh the requests list
+            fetchRequests(); 
         } else {
             console.error('Request data not found.');
         }

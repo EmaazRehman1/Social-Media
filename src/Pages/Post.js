@@ -29,17 +29,17 @@ export const CreateForm = ({ onPostCreated }) => {
       await addDoc(postsRef, {
         title: title,
         description: desc,
-        username: user?.username|| user?.email, // Changed to displayName
+        username: user?.username|| user?.email, 
         id: user?.uid,
-        timestamp: serverTimestamp(), // Add timestamp
+        timestamp: serverTimestamp(), 
       });
       toast.success("Post Sucessfull!!", {
         position: "top-center"
       })
       if (onPostCreated) {
-        onPostCreated(); // Trigger refresh in Feed
+        onPostCreated(); 
     }
-      setTitle(""); // Clear the form
+      setTitle(""); 
       setDesc("");
     } catch (error) {
       console.error("Error creating post:", error);

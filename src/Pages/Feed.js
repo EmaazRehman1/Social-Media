@@ -12,18 +12,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const Feed = () => {
     const [user] = useAuthState(auth);
-    const [posts, setPosts] = useState([]); // State to hold posts
-    const [loading, setLoading] = useState(true); // Loading state
+    const [posts, setPosts] = useState([]); 
+    const [loading, setLoading] = useState(true); 
     const [refreshPosts, setRefreshPosts] = useState(false);
-    const [sidebarOpen, setSidebarOpen] = useState(false); // State for sidebar visibility
+    const [sidebarOpen, setSidebarOpen] = useState(false); 
 
-    // Fetch posts from Firestore
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 const postsQuery = query(
                     collection(db, 'posts'),
-                    // orderBy('timestamp', 'desc') // Order by timestamp in descending order
                 );
                 const querySnapshot = await getDocs(postsQuery);
                 const fetchedPosts = querySnapshot.docs.map(doc => ({
@@ -36,21 +34,20 @@ export const Feed = () => {
             } catch (error) {
                 console.error('Error fetching posts:', error);
             } finally {
-                setLoading(false); // Stop loading
+                setLoading(false); 
             }
         };
         fetchPosts();
     }, [refreshPosts]);
 
     const handlePostCreated = () => {
-        setRefreshPosts(prev => !prev); // Toggle `refreshPosts` to trigger re-fetch
+        setRefreshPosts(prev => !prev); 
     };
 
     return (
         <>
             {user ? (
                 <div className="flex min-h-screen">
-                    {/* Sidebar */}
                     <div
                         className={`fixed z-20 top-16 transition-transform transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
                             } bg-gray-800 text-white h-full w-64`}
@@ -58,20 +55,16 @@ export const Feed = () => {
                         <Sidebar />
                     </div>
 
-                    {/* Main Content */}
                     <div className="flex-1 flex flex-col">
-                        {/* NavBar */}
                         <div className="sticky top-0 z-30 bg-white">
-                            <NavBar />
                             <Button
                                 className="ml-4 mt-2"
                                 color="blue"
                                 onClick={() => setSidebarOpen(!sidebarOpen)}
                             >
-                                {/* {sidebarOpen ? 'Close Sidebar' : 'Open Sidebar'} */}
-                                {/* {sidebarOpen ? '<' : `${faBars}`} */}
+                         
                                 {sidebarOpen ? (
-                                    <span style={{ fontSize: '18px', fontWeight: 'bold' }}>{'>'}</span> // Close icon
+                                    <span style={{ fontSize: '18px', fontWeight: 'bold' }}>{'>'}</span> 
                                     // <FontAwesomeIcon icon={'fa-solid fa-right-long'}/>
                                 ) : (
                                     <FontAwesomeIcon icon={faBars} /> // Menu icon
@@ -79,14 +72,12 @@ export const Feed = () => {
 
                             </Button>
                         </div>
-                        {/* Content Area */}
                         <CreateForm onPostCreated={handlePostCreated} />
                         <div className="p-6 bg-gray-100 flex-1">
                             <h1 className="text-2xl font-semibold text-gray-800">
                                 Welcome to your feed, See what's new
                             </h1>
 
-                            {/* Posts */}
                             <div className="mt-6 space-y-4">
                                 {loading ? (
                                     <div className="flex justify-center items-center">
